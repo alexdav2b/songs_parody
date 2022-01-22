@@ -1,0 +1,80 @@
+<header>
+    <section id="imports">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </section>
+</header>
+<h1>Song Parody</h1>
+<main>
+    <section id="searchbar">
+        <p>Themes</p>
+        <select name="Themes" id="theme_select">
+            <option value="">--Please choose a theme--</option>
+            {% for theme in themes %}
+                <option value="{{ theme }}" id="{{ theme.id }}">{{ theme }}</option>
+            {% endfor %}
+        </select>
+
+        <p>Songs</p>
+        <select name="Songs" id="song_select">
+            <option value="">--Please choose a song--</option>
+            {% for song in songs %}
+                <option value="{{ song }}" id="{{ song.id }}">{{ song }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" id="generate_parody_btn">Generate Parody</button>
+    </section>
+
+    <section id="lyrics">
+        <h3>Original lyrics</h3>
+        <section id="original_lyrics"></section>
+        <h3>Parody lyrics</h3>
+        <section id="parody_lyrics"></section>
+    </section>
+    <section id="js_scripts">
+        <script>
+            $('#song_select').change(function (){
+                const song_id = $(this).find('option:selected').attr('id')
+                $.ajax({
+                   type: 'GET',
+                    url: "{% url 'get_lyrics' %}",
+                    data: {"song_id": song_id},
+                    success: function (response) {
+                        $('#original_lyrics').html(response)
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                })
+            })
+            $('#generate_parody_btn').click(function (){
+                const theme_id = $('#theme_select').find('option:selected').attr('id')
+                if (typeof theme_id == "undefined"){
+                    alert("Please select a theme")
+                    return
+                }
+                const song_id = $('#song_select').find('option:selected').attr('id')
+                if (typeof song_id == "undefined"){
+                    alert("Please select a song")
+                    return
+                }
+                $.ajax({
+                   type: 'GET',
+                    url: "{% url 'get_parody' %}",
+                    data: {
+                        "theme_id": theme_id,
+                        "song_id": song_id,
+                    },
+                    success: function (response) {
+                        $('#parody_lyrics').html(response)
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                })
+            })
+        </script>
+    </section>
+
+</main>
