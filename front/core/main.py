@@ -95,7 +95,8 @@ def load_model(name):
 
 
 def do_parody(_theme, _lyrics):
-    _model = load_model(_theme)
+    _model = load_base_model()
+    # _model = load_model(_theme)
     unmasker = pipeline('fill-mask', model=_model, tokenizer=tokenizer)
     # TODO implement workflow
     return _lyrics
