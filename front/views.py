@@ -41,8 +41,12 @@ def get_parody(request):
             return JsonResponse("need the id of the song to get lyrics", status=400)
 
         song = Song.objects.get(pk=song_id)
-        lyrics = song.get_lyrics_by_line()
-        parody_lyrics = do_parody(lyrics)
-        return render(request, 'front/lyrics.html', {"lyrics": parody_lyrics})
+        lyrics = song.lyrics
+        print(lyrics)
+        theme = Theme.objects.get(pk=theme_id)
+        theme = theme.name.lower()
+        parody_lyrics = do_parody(lyrics, f"front/core/{theme}")
+        print(parody_lyrics)
+        return render(request, 'front/lyrics.html', {"lyrics": parody_lyrics.split('\n')})
 
     return JsonResponse({}, status=400)

@@ -2,6 +2,8 @@
 from transformers import pipeline, AutoTokenizer, AutoModelForMaskedLM, TrainingArguments, \
     DataCollatorForLanguageModeling, Trainer
 from datasets import load_dataset
+from random import randint
+import os
 
 
 model_checkpoint = "distilroberta-base"
@@ -68,7 +70,7 @@ def mlm_fine_tuning(dataset, name):
 def fill_mask(_model, sentence):
     # unmasker = pipeline('fill-mask', model=trainer.model, tokenizer=tokenizer)
     unmasker = pipeline('fill-mask', model=_model, tokenizer=tokenizer)
-    res = unmasker(sentence)
+    res = unmasker(sentence)[0]["sequence"]
     return res
 
 
@@ -88,17 +90,47 @@ def generate_models(models):
 
 
 def load_model(name):
+    print(f"{name}/model")
     trained_model = AutoModelForMaskedLM.from_pretrained(f"{name}/model")
     base_res = fill_mask(trained_model, "I am so <mask>.")
     print(base_res)
     return trained_model
 
 
-def do_parody(_theme, _lyrics):
-    _model = load_base_model()
-    # _model = load_model(_theme)
-    unmasker = pipeline('fill-mask', model=_model, tokenizer=tokenizer)
-    # TODO implement workflow
+def do_parody(_lyrics, _theme):
+    my_model = load_model(_theme)
+    sentence_changed = dict()
+    word_changed = dict()
+    lyrics_to_fill = []
+
+    # sentence tokenization
+    sentences = _lyrics.splitlines()
+
+    for x in range(len(sentences)):
+        if sentences[x] in sentence_changed.keys():  # selon les phrases, on récupère le format à compléter pour éviter différents refrains
+            sentences[x] = sentence_changed[sentences[x]]
+        else:
+            words = sentences[x].split(" ")  # word tokenization
+            # random de mot à remplacer par phrase
+            if len(words) > 1:
+                longest_id = randint(0, len(words) - 1)
+                size = 1
+                for word_id, word in enumerate(words):
+                    if len(word) >= size:
+                        size = len(word)
+                        longest_id = word_id
+                words[longest_id] = "<mask>"
+
+            sentence_changed[sentences[x]] = " ".join(words)  # on garde les phrases déja rencontrés et modifiées
+            sentences[x] = " ".join(words)
+    lyrics_to_fill = sentences
+    print(lyrics_to_fill)
+    # On applique le modèle à nos phrases
+    for x in range(len(lyrics_to_fill)):
+        if "<mask>" in lyrics_to_fill[x]:
+            lyrics_to_fill[x] = fill_mask(my_model, lyrics_to_fill[x]) # model()  ###########  modifier le call au modèle préentrainé et changement de la phrase
+
+    _lyrics = "\n".join(lyrics_to_fill)
     return _lyrics
 
 
@@ -110,10 +142,8 @@ if __name__ == "__main__":
         "hate",
     ]
     # generate_models(list_models)
-    model = load_model(list_models[2])
-    lyrics = ""
-    theme = ""
-    res = do_parody(theme, lyrics)
+    # model = load_model(list_models[2])
+    lyrics = "this is my text\nthis is my second line"
+    theme = "love"
+    res = do_parody(lyrics, theme)
     print(res)
-
-

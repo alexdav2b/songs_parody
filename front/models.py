@@ -10,7 +10,6 @@ class Theme(models.Model):
 
 class Song(models.Model):
     name = models.CharField(max_length=70)
-    theme = models.ForeignKey(Theme, on_delete=models.CASCADE)
     lyrics = models.TextField()
 
     def get_lyrics_by_line(self):
