@@ -3,7 +3,6 @@ from transformers import pipeline, AutoTokenizer, AutoModelForMaskedLM, Training
     DataCollatorForLanguageModeling, Trainer
 from datasets import load_dataset
 from random import randint
-import os
 
 
 model_checkpoint = "distilroberta-base"
@@ -25,7 +24,6 @@ def group_texts(examples):
     concatenated_examples = {k: sum(examples[k], []) for k in examples.keys()}
     total_length = len(concatenated_examples[list(examples.keys())[0]])
     # We drop the small remainder, we could add padding if the model supported it instead of this drop, you can
-        # customize this part to your needs.
     total_length = (total_length // block_size) * block_size
     # Split by chunks of max_len.
     result = {
@@ -37,7 +35,6 @@ def group_texts(examples):
 
 
 def mlm_fine_tuning(dataset, name):
-    # datasets = load_dataset('wikitext', 'wikitext-2-raw-v1')
     tokenized_datasets = dataset.map(tokenize_function, batched=True, num_proc=4, remove_columns=["text"])
     lm_datasets = tokenized_datasets.map(
         group_texts,
@@ -128,7 +125,7 @@ def do_parody(_lyrics, _theme):
     # On applique le modèle à nos phrases
     for x in range(len(lyrics_to_fill)):
         if "<mask>" in lyrics_to_fill[x]:
-            lyrics_to_fill[x] = fill_mask(my_model, lyrics_to_fill[x]) # model()  ###########  modifier le call au modèle préentrainé et changement de la phrase
+            lyrics_to_fill[x] = fill_mask(my_model, lyrics_to_fill[x])
 
     _lyrics = "\n".join(lyrics_to_fill)
     return _lyrics
@@ -141,9 +138,9 @@ if __name__ == "__main__":
         "sadness",
         "hate",
     ]
-    # generate_models(list_models)
+    generate_models(list_models)
     # model = load_model(list_models[2])
-    lyrics = "this is my text\nthis is my second line"
-    theme = "love"
-    res = do_parody(lyrics, theme)
-    print(res)
+    # lyrics = "this is my text\nthis is my second line"
+    # theme = "love"
+    # res = do_parody(lyrics, theme)
+    # print(res)

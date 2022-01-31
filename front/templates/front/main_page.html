@@ -1,37 +1,167 @@
+<html>
 <header>
     <section id="imports">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <link href='https://fonts.googleapis.com/css?family=Sacramento:400' rel='stylesheet' type='text/css'>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Cabin&display=swap" rel="stylesheet">
     </section>
+
+
+    <style>
+        body{
+            background-color: black;
+        }
+
+        .button, .select_btn {
+          background-color: mediumpurple; /* Green */
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          font-size: 16px;
+          cursor: pointer;
+          float: left;
+        }
+
+        .button:hover {
+          background-color: #bc13fe;
+}
+
+        .test{
+            box-shadow: 0 0 .1rem #fff,
+            0 0 .1rem #fff,
+            0 0 1rem #fff,
+            0 0 0.3rem #fff,
+            0 0 .3rem #fff,
+            inset 0 0 1.3rem #fff;
+        }
+
+
+        .neonText {
+          color: #fff;
+          text-shadow:
+            0 0 7px #fff,
+            0 0 10px #fff,
+            0 0 21px #fff,
+            0 0 42px #bc13fe,
+            0 0 82px #bc13fe,
+            0 0 92px #bc13fe,
+            0 0 102px #bc13fe,
+            0 0 151px #bc13fe;
+        }
+
+        h1 {
+          text-align: center;
+          font-weight: 400;
+        }
+
+        h1 {
+            font-family: sacramento;
+          font-size: 6.2rem;
+          animation: pulsate 1.5s infinite alternate;
+          border: 0.2rem solid #fff;
+          border-radius: 2rem;
+          padding: 0.4em;
+          box-shadow: 0 0 .2rem #fff,
+                    0 0 .2rem #fff,
+                    0 0 2rem #bc13fe,
+                    0 0 0.8rem #bc13fe,
+                    0 0 2.8rem #bc13fe,
+                    inset 0 0 1.3rem #bc13fe;
+        }
+
+        @keyframes pulsate {
+
+          100% {
+
+              text-shadow:
+              0 0 4px #fff,
+              0 0 11px #fff,
+              0 0 19px #fff,
+              0 0 40px #bc13fe,
+              0 0 80px #bc13fe,
+              0 0 90px #bc13fe,
+              0 0 100px #bc13fe,
+              0 0 150px #bc13fe;
+
+          }
+
+          0% {
+
+            text-shadow:
+            0 0 2px #fff,
+            0 0 4px #fff,
+            0 0 6px #fff,
+            0 0 10px #bc13fe,
+            0 0 45px #bc13fe,
+            0 0 55px #bc13fe,
+            0 0 70px #bc13fe,
+            0 0 80px #bc13fe;
+          }}
+
+
+        </style>
+
 </header>
-<h1>Song Parody</h1>
 <main>
-    <section id="searchbar">
-        <p>Themes</p>
-        <select name="Themes" id="theme_select">
-            <option value="">--Please choose a theme--</option>
-            {% for theme in themes %}
-                <option value="{{ theme }}" id="{{ theme.id }}">{{ theme }}</option>
-            {% endfor %}
-        </select>
+  <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark">
+      <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="neonText">Song Parody</h1>
+      </div>
+        <div class="row justify-content-md-center">
+            <div class="col-3">
+            <select name="Themes" id="theme_select" class="select_btn">
+                <option value="">Choose a theme</option>
+                {% for theme in themes %}
+                    <option value="{{ theme }}" id="{{ theme.id }}">{{ theme }}</option>
+                {% endfor %}
+            </select>
+            </div>
+            <div class="col-auto">
 
-        <p>Songs</p>
-        <select name="Songs" id="song_select">
-            <option value="">--Please choose a song--</option>
-            {% for song in songs %}
-                <option value="{{ song }}" id="{{ song.id }}">{{ song }}</option>
-            {% endfor %}
-        </select>
-        <button type="button" id="generate_parody_btn">Generate Parody</button>
-    </section>
+            <select name="Songs" id="song_select" class="select_btn">
+                <option value="">Choose a song</option>
+                {% for song in songs %}
+                    <option value="{{ song }}" id="{{ song.id }}">{{ song }}</option>
+                {% endfor %}
+            </select>
 
-    <section id="lyrics">
-        <h3>Original lyrics</h3>
-        <section id="original_lyrics"></section>
-        <h3>Parody lyrics</h3>
-        <section id="parody_lyrics"></section>
-    </section>
+            </div>
+            <div class="col-3">
+            <button class="button" type="button" id="generate_parody_btn" style="vertical-align: middle; color: white; margin-left: 150px;"><span>Generate Parody<span></button>
+                </div>
+        </div>
+  </div>
+
+      <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+        <div class="col-lg-6 col-md-6 bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden test">
+          <div class="my-3 py-3">
+            <h2 class="display-5" style="font-family: 'Balsamiq Sans', cursive; color: white;">Original Lyrics</h2>
+          </div>
+          <div class="bg-dark shadow-sm mx-auto" style="width: 80%; border-radius: 21px 21px 0 0; color:white;">
+              <br><br>
+              <section id="original_lyrics"></section>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden test">
+          <div class="my-3 p-3">
+            <h2 class="display-5" style="font-family: 'Balsamiq Sans', cursive; color: white;">Parody lyrics</h2>
+          </div>
+          <div class="bg-dark shadow-sm mx-auto" style="width: 80%; border-radius: 21px 21px 0 0; color:white;">
+              <br><br>
+              <section id="parody_lyrics"></section>
+          </div>
+        </div>
+      </div>
+
+
     <section id="js_scripts">
         <script>
             $('#song_select').change(function (){
@@ -78,3 +208,87 @@
     </section>
 
 </main>
+<footer>
+        <script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</footer>
+<script async src='/cdn-cgi/bm/cv/669835187/api.js'></script><script type="text/javascript">(function(){window['__CF$cv$params']={r:'6d616002f8323bb0',m:'kZjeqPoKN1Z9Y.lkR8DiTTVmHdQGM2HxZnANkkJ2RhQ-1643615698-0-AXHOYf2hkVQ2/Q8aRq4JEob4obivKb32nMy70s7AcnGGvyejh5Ps1oEdCADkZSuU8231+y9D78269Xhe+L7IFwY7C9YuuL3Gzv4x5k98+/sdOzlIcMopqLUuKv4evFzXG7Pr9YT14qeTdTyO1OD4gQ/U/hByuJAA0Ll3Oi3+ZoIkYb4Y5fV62CR3vmV64cQlxaV4pT/XFQi+TrHOGh/QQpg=',s:[0xc1c0e7bf5b,0xd796ebf6f4],}})();</script></html>
+{#<header>#}
+{#    <section id="imports">#}
+{#        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>#}
+{#        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>#}
+{#        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>#}
+{#    </section>#}
+{#</header>#}
+{#<h1>Song Parody</h1>#}
+{#<main>#}
+{#    <section id="searchbar">#}
+{#        <p>Themes</p>#}
+{#        <select name="Themes" id="theme_select">#}
+{#            <option value="">--Please choose a theme--</option>#}
+{#            {% for theme in themes %}#}
+{#                <option value="{{ theme }}" id="{{ theme.id }}">{{ theme }}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+{##}
+{#        <p>Songs</p>#}
+{#        <select name="Songs" id="song_select">#}
+{#            <option value="">--Please choose a song--</option>#}
+{#            {% for song in songs %}#}
+{#                <option value="{{ song }}" id="{{ song.id }}">{{ song }}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+{#        <button type="button" id="generate_parody_btn">Generate Parody</button>#}
+{#    </section>#}
+{##}
+{#    <section id="lyrics">#}
+{#        <h3>Original lyrics</h3>#}
+{#        <section id="original_lyrics"></section>#}
+{#        <h3>Parody lyrics</h3>#}
+{#        <section id="parody_lyrics"></section>#}
+{#    </section>#}
+{#    <section id="js_scripts">#}
+{#        <script>#}
+{#            $('#song_select').change(function (){#}
+{#                const song_id = $(this).find('option:selected').attr('id')#}
+{#                $.ajax({#}
+{#                   type: 'GET',#}
+{#                    url: "{% url 'get_lyrics' %}",#}
+{#                    data: {"song_id": song_id},#}
+{#                    success: function (response) {#}
+{#                        $('#original_lyrics').html(response)#}
+{#                    },#}
+{#                    error: function (response) {#}
+{#                        console.log(response)#}
+{#                    }#}
+{#                })#}
+{#            })#}
+{#            $('#generate_parody_btn').click(function (){#}
+{#                const theme_id = $('#theme_select').find('option:selected').attr('id')#}
+{#                if (typeof theme_id == "undefined"){#}
+{#                    alert("Please select a theme")#}
+{#                    return#}
+{#                }#}
+{#                const song_id = $('#song_select').find('option:selected').attr('id')#}
+{#                if (typeof song_id == "undefined"){#}
+{#                    alert("Please select a song")#}
+{#                    return#}
+{#                }#}
+{#                $.ajax({#}
+{#                   type: 'GET',#}
+{#                    url: "{% url 'get_parody' %}",#}
+{#                    data: {#}
+{#                        "theme_id": theme_id,#}
+{#                        "song_id": song_id,#}
+{#                    },#}
+{#                    success: function (response) {#}
+{#                        $('#parody_lyrics').html(response)#}
+{#                    },#}
+{#                    error: function (response) {#}
+{#                        console.log(response)#}
+{#                    }#}
+{#                })#}
+{#            })#}
+{#        </script>#}
+{#    </section>#}
+{##}
+{#</main>#}
